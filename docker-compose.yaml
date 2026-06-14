@@ -1,0 +1,57 @@
+services:
+  auth-service:
+    build:
+      context: .
+      dockerfile: ./apps/auth-service/dockerfile
+      target: development
+    command: npm run start:dev auth-service
+    env_file:
+      - ./apps/auth-service/.env
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - '3001:3001'
+
+  sync-service:
+    build:
+      context: .
+      dockerfile: ./apps/sync-service/dockerfile
+      target: development
+    command: npm run start:dev sync-service
+    env_file:
+      - ./apps/sync-service/.env
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - '3002:3002'
+
+  processing-service:
+    build:
+      context: .
+      dockerfile: ./apps/processing-service/dockerfile
+      target: development
+    command: npm run start:dev processing-service
+    env_file:
+      - ./apps/processing-service/.env
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - '3003:3003'
+
+
+  analytics-service:
+    build:
+      context: .
+      dockerfile: ./apps/analytics-service/dockerfile
+      target: development
+    command: npm run start:dev analytics-service
+    env_file:
+      - ./apps/analytics-service/.env
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - '3004:3004'
