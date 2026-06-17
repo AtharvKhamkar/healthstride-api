@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateHealthSyncDto } from '../dto/create-health-sync.dto';
 
 import { HealthRawEventRepository }
-from '../repository/health-raw-event.repository';
+  from '../repository/health-raw-event.repository';
 
 @Injectable()
 export class HealthSyncService {
@@ -11,7 +11,7 @@ export class HealthSyncService {
   constructor(
     private readonly repository:
       HealthRawEventRepository,
-  ) {}
+  ) { }
 
   async syncHealthData(
     userId: string,
@@ -33,8 +33,10 @@ export class HealthSyncService {
 
     return {
       success: true,
-      recordsProcessed:
-        records?.length,
+      data: {
+        processedRecords: records?.length
+      }
+      ,
     };
   }
 }

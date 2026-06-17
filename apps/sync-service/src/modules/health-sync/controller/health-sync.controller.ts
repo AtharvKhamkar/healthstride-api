@@ -4,12 +4,8 @@ import {
   Post,
 } from '@nestjs/common';
 
-import { CreateHealthSyncDto }
-from '../dto/create-health-sync.dto';
-
-import { HealthSyncService }
-from '../service/health-sync.service';
-import { get } from 'http';
+import { CreateHealthSyncDto } from '../dto/create-health-sync.dto';
+import { HealthSyncService } from '../service/health-sync.service';
 
 @Controller('health')
 export class HealthSyncController {
