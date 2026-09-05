@@ -9,7 +9,7 @@ export class PostgreSqlService implements OnModuleDestroy {
     private pool: Pool;
 
     constructor(private configService: ConfigService) {
-        const databaseUrl = this.configService.get<string>('DATABASE_URL');
+        const databaseUrl = this.configService.get<string>('POSTGRESQL_DATABASE_URL');
         this.pool = new Pool({
             connectionString: databaseUrl,
             ssl: false,
