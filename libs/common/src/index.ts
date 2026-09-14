@@ -12,4 +12,5 @@ export * from './infrastructure/storage/storage.module'
 export * from './filters/global-exception.filter'
 export * from './interceptor/global-response.interceptor'
 export * from './utils/response.util'
+export * from './utils/password.util'
 

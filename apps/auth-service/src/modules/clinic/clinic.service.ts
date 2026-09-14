@@ -1,16 +1,19 @@
 import { BadRequestException, Injectable, Logger } from "@nestjs/common";
 import { CheckClinicOwnerExistsDto } from "./dtos/check-clinic-owner-exists.dto";
-import { IPgQuery, PostgreSqlService, ResponseUtil } from "@app/common";
+import { IPgQuery, PasswordUtil, PostgreSqlService, ResponseUtil } from "@app/common";
 import { FnCheckClinicOwnerExistsResult, FnRegisterClinicOwnerResult, FnVerifyClinicOwnerResult } from "./types/ clinic.types";
 import { CheckClinicOwnerExistsEntity } from "./entities/check-clinic-owner-exists-response.entity";
 import { VerifyClinicOwnerDto } from "./dtos/verify-clinic-owner.dto";
 import { VerifyClinicOwnerResponseEntity } from "./entities/verify-clinic-owner-response.entity";
 import { ClinicOwnerRegisterDto } from "./dtos/clinic-owner-register.dto";
 import { ClinicOwnerRegisterResponseEntity } from "./entities/clinic-owner-register-response.entity";
+import { ConfigService } from "@nestjs/config";
 
 @Injectable()
 export class ClinicService {
-    constructor(private readonly postgreSqlService: PostgreSqlService) { }
+    constructor(private readonly postgreSqlService: PostgreSqlService,
+        private readonly configService: ConfigService
+    ) { }
 
     async checkClinicOwnerExists(dto: CheckClinicOwnerExistsDto) {
         const pgQuery: IPgQuery = {
@@ -64,6 +67,9 @@ export class ClinicService {
     }
 
     async registerClinicOwer(dto: ClinicOwnerRegisterDto) {
+         const pepper = this.configService.get<string>('PASSWORD_PEPPER') ?? '';
+    const hashedPassword = await PasswordUtil.hash(dto.password, pepper);
+
         const pgQuery: IPgQuery = {
             query: `SELECT * FROM auth.fn_clinic_owner_register($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`,
             params: [
@@ -73,7 +79,7 @@ export class ClinicService {
                 dto.email,
                 dto.countryCodeId,
                 dto.phoneNumber,
-                dto.password,
+                hashedPassword,
                 dto.roleId,
                 dto.profile_photo_key,
                 dto.birth_date,

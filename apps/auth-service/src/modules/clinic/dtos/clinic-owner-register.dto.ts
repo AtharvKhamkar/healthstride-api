@@ -1,5 +1,6 @@
+import { Gender } from "@app/common";
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
-import { IsEmail, IsMobilePhone, IsNotEmpty, IsOptional, IsString, IsUUID, MaxLength, MinLength } from "class-validator";
+import { IsEmail, IsEnum, IsMobilePhone, IsNotEmpty, IsOptional, IsString, IsUUID, MaxLength, MinLength } from "class-validator";
 
 export class ClinicOwnerRegisterDto {
 
@@ -29,7 +30,7 @@ export class ClinicOwnerRegisterDto {
   @MaxLength(200)
   email!: string;
 
-  @ApiProperty({ example: "e819951e-eca1-49b5-9e2d-2e9b08208d6f" })
+  @ApiProperty({ example: "01a077ce-788a-7015-bc4e-117ec75dda31"})
   @IsUUID()
   countryCodeId!: string;
 
@@ -43,7 +44,7 @@ export class ClinicOwnerRegisterDto {
   @MinLength(8)
   password!: string;
 
-  @ApiProperty({ example: "1d5ef201-0972-4daa-b724-4325dcf28031" })
+  @ApiProperty({ example: "01a077ce-797a-77ae-949f-7cdf1560407f" })
   @IsUUID()
   roleId!: string
 
@@ -57,8 +58,12 @@ export class ClinicOwnerRegisterDto {
   @IsString()
   birth_date?: string;
 
-  @ApiProperty({ example: "1d5ef201-0972-4daa-b724-4325dcf28031" })
-  @IsUUID()
-  gender!: string
+  @ApiProperty({
+    example: Gender.MALE,
+    enum: Gender,
+    description: "User gender",
+  })
+  @IsEnum(Gender)
+  gender!: Gender
 }
 
