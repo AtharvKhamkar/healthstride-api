@@ -1,12 +1,12 @@
 import { BadRequestException, Injectable, Logger } from "@nestjs/common";
-import { CheckClinicOwnerExistsDto } from "./dtos/check-clinic-owner-exists.dto";
-import { IPgQuery, PasswordUtil, PostgreSqlService, ResponseUtil } from "@app/common";
-import { FnCheckClinicOwnerExistsResult, FnRegisterClinicOwnerResult, FnVerifyClinicOwnerResult } from "./types/ clinic.types";
-import { CheckClinicOwnerExistsEntity } from "./entities/check-clinic-owner-exists-response.entity";
-import { VerifyClinicOwnerDto } from "./dtos/verify-clinic-owner.dto";
-import { VerifyClinicOwnerResponseEntity } from "./entities/verify-clinic-owner-response.entity";
-import { ClinicOwnerRegisterDto } from "./dtos/clinic-owner-register.dto";
-import { ClinicOwnerRegisterResponseEntity } from "./entities/clinic-owner-register-response.entity";
+import { CheckClinicOwnerExistsDto } from "../dtos/check-clinic-owner-exists.dto";
+import { IPgQuery, OtpUtil, PasswordUtil, PostgreSqlService, ResponseUtil } from "@app/common";
+import { FnCheckClinicOwnerExistsResult, FnRegisterClinicOwnerResult, FnVerifyClinicOwnerResult } from "../types/ clinic.types";
+import { CheckClinicOwnerExistsEntity } from "../entities/check-clinic-owner-exists-response.entity";
+import { VerifyClinicOwnerDto } from "../dtos/verify-clinic-owner.dto";
+import { VerifyClinicOwnerResponseEntity } from "../entities/verify-clinic-owner-response.entity";
+import { ClinicOwnerRegisterDto } from "../dtos/clinic-owner-register.dto";
+import { ClinicOwnerRegisterResponseEntity } from "../entities/clinic-owner-register-response.entity";
 import { ConfigService } from "@nestjs/config";
 
 @Injectable()
@@ -67,8 +67,8 @@ export class ClinicService {
     }
 
     async registerClinicOwer(dto: ClinicOwnerRegisterDto) {
-         const pepper = this.configService.get<string>('PASSWORD_PEPPER') ?? '';
-    const hashedPassword = await PasswordUtil.hash(dto.password, pepper);
+        const pepper = this.configService.get<string>('PASSWORD_PEPPER') ?? '';
+        const hashedPassword = await PasswordUtil.hash(dto.password, pepper);
 
         const pgQuery: IPgQuery = {
             query: `SELECT * FROM auth.fn_clinic_owner_register($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`,
@@ -95,8 +95,17 @@ export class ClinicService {
             )
         }
 
+        // 2. Create random six digit otp
+        const otp = OtpUtil.generate();
+
+        const hashedOtp = await OtpUtil.hash(otp, pepper);
+
+
+
+
+
         return ResponseUtil.success(
-            'Clinic owner checked successfully',
+            'Clinic owner registered successfully',
             new ClinicOwnerRegisterResponseEntity({
                 isRegistered: queryData?.data?.isRegistered,
             })

@@ -1,6 +1,6 @@
 import { Body, Controller, Post } from "@nestjs/common";
 import { ApiBody } from "@nestjs/swagger";
-import { ClinicService } from "./clinic.service";
+import { ClinicService } from "./services/clinic.service";
 import { CheckClinicOwnerExistsDto } from "./dtos/check-clinic-owner-exists.dto";
 import { VerifyClinicOwnerDto } from "./dtos/verify-clinic-owner.dto";
 import { ClinicOwnerRegisterDto } from "./dtos/clinic-owner-register.dto";

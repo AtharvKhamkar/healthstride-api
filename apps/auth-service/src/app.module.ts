@@ -5,7 +5,7 @@ import { AdminModule } from './modules/admin/admin.module';
 import { DoctorModule } from './modules/doctor/doctor.module';
 import { UserModule } from './modules/user/user.module';
 import { ConfigModule } from '@nestjs/config';
-import { CommonModule } from '@app/common';
+import { CommonModule, rabbitmqConfig } from '@app/common';
 
 
 @Module({
@@ -13,6 +13,7 @@ import { CommonModule } from '@app/common';
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env',
+      load: [rabbitmqConfig]
     }),
     CommonModule,
     ClinicModule, AdminModule, DoctorModule, UserModule],

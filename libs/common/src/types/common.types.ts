@@ -82,3 +82,33 @@ export enum Gender {
   OTHER = 'OTHER',
   PREFER_NOT_TO_SAY = 'PREFER_NOT_TO_SAY',
 }
+
+
+export enum OtpPurpose {
+    forgotPassword = 'FORGOT_PASSWORD',
+    emailVerification = 'EMAIL_VERIFICATION',
+    phoneVerification = 'PHONE_VERIFICATION',
+    passwordReset = 'PASSWORD_RESET',
+    loginOtp = 'LOGIN_OTP',
+    twoFactorAuth = 'TWO_FACTOR_AUTH'
+} 
+
+
+export interface IWelcomeEmailEventPayload {
+    email: string,
+    name: string
+}
+
+export interface IForgotPasswordEmailEventPayload {
+    email: string,
+    name: string,
+    otp: string,
+    expiresAt: string
+}
+
+export interface IEmailVerifyEmailEventPayload {
+    email: string,
+    name: string,
+    otp: string,
+    expiresAt: string
+}
