@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable, Logger } from "@nestjs/common";
 import { CheckClinicOwnerExistsDto } from "../dtos/check-clinic-owner-exists.dto";
-import { IPgQuery, OtpUtil, PasswordUtil, PostgreSqlService, ResponseUtil } from "@app/common";
+import { IPgQuery, OtpUtil, PasswordUtil, PostgreSqlService, ResponseUtil, TimeConversionUtil } from "@app/common";
 import { FnCheckClinicOwnerExistsResult, FnRegisterClinicOwnerResult, FnVerifyClinicOwnerResult } from "../types/ clinic.types";
 import { CheckClinicOwnerExistsEntity } from "../entities/check-clinic-owner-exists-response.entity";
 import { VerifyClinicOwnerDto } from "../dtos/verify-clinic-owner.dto";
@@ -8,11 +8,13 @@ import { VerifyClinicOwnerResponseEntity } from "../entities/verify-clinic-owner
 import { ClinicOwnerRegisterDto } from "../dtos/clinic-owner-register.dto";
 import { ClinicOwnerRegisterResponseEntity } from "../entities/clinic-owner-register-response.entity";
 import { ConfigService } from "@nestjs/config";
+import { ClinicMailService } from "./clinic.mail.service";
 
 @Injectable()
 export class ClinicService {
     constructor(private readonly postgreSqlService: PostgreSqlService,
-        private readonly configService: ConfigService
+        private readonly configService: ConfigService,
+        private readonly clinicMailService: ClinicMailService
     ) { }
 
     async checkClinicOwnerExists(dto: CheckClinicOwnerExistsDto) {
@@ -70,8 +72,15 @@ export class ClinicService {
         const pepper = this.configService.get<string>('PASSWORD_PEPPER') ?? '';
         const hashedPassword = await PasswordUtil.hash(dto.password, pepper);
 
+        // 2. Create random six digit otp
+        const otp = OtpUtil.generate();
+        const hashedOtp = await OtpUtil.hash(otp, pepper);
+
+        //3. email verification otp expires in
+        const otpExpiresIn = this.configService.get<string>('EMAIL_VERIFY_EXPIRES_IN') ?? '';
+
         const pgQuery: IPgQuery = {
-            query: `SELECT * FROM auth.fn_clinic_owner_register($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`,
+            query: `SELECT * FROM auth.fn_clinic_owner_register($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)`,
             params: [
                 dto.firstName,
                 dto.middleName,
@@ -83,7 +92,9 @@ export class ClinicService {
                 dto.roleId,
                 dto.profile_photo_key,
                 dto.birth_date,
-                dto.gender
+                dto.gender,
+                hashedOtp,
+                otpExpiresIn
             ]
         }
 
@@ -95,22 +106,18 @@ export class ClinicService {
             )
         }
 
-        // 2. Create random six digit otp
-        const otp = OtpUtil.generate();
+        const formattedExpiryTime = TimeConversionUtil.formatTime(queryData.data?.expiresAt ?? '');
 
-        const hashedOtp = await OtpUtil.hash(otp, pepper);
-
-
-
+        this.clinicMailService.verifyEmailAddressEmail({ email: dto.email, name: `${dto.firstName} ${dto.lastName}`, otp: otp, expiresAt: formattedExpiryTime })
 
 
         return ResponseUtil.success(
             'Clinic owner registered successfully',
             new ClinicOwnerRegisterResponseEntity({
                 isRegistered: queryData?.data?.isRegistered,
+                userId: queryData?.data?.userId,
+                expiresAt: queryData?.data?.expiresAt
             })
         );
     }
-
-
 }

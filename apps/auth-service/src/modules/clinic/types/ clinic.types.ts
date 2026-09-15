@@ -13,4 +13,6 @@ export type FnVerifyClinicOwnerResult = ISqlFnResult<{
 
 export type FnRegisterClinicOwnerResult = ISqlFnResult<{
     isRegistered: boolean,
+    userId: string,
+    expiresAt: string
 }>;

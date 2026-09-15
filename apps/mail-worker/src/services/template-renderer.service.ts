@@ -7,7 +7,7 @@ import { TemplatesRendererOptions } from "../types/mail.types";
 export class TemplateRendererService {
     private readonly templateDir = path.join(
         process.cwd(),
-        'apps/mail-worker/templates',
+        'apps/mail-worker/src/templates',
     );
 
     async render(options: TemplatesRendererOptions): Promise<string> {
