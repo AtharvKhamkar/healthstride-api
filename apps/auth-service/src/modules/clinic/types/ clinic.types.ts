@@ -8,7 +8,8 @@ export type FnCheckClinicOwnerExistsResult = ISqlFnResult<{
 }>;
 
 export type FnVerifyClinicOwnerResult = ISqlFnResult<{
-    isVerified: boolean,
+    otpId: string,
+    otpHash: string
 }>;
 
 export type FnRegisterClinicOwnerResult = ISqlFnResult<{
@@ -16,3 +17,5 @@ export type FnRegisterClinicOwnerResult = ISqlFnResult<{
     userId: string,
     expiresAt: string
 }>;
+
+export type FnSetInactiveOtpResult = ISqlFnResult<{}>;
