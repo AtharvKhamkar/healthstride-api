@@ -19,3 +19,8 @@ export type FnRegisterClinicOwnerResult = ISqlFnResult<{
 }>;
 
 export type FnSetInactiveOtpResult = ISqlFnResult<{}>;
+
+export type FnRegisterUserSessionResult = ISqlFnResult<{
+    isSessionRegistered: boolean
+}>;
+
