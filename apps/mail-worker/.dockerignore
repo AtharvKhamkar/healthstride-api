@@ -1,0 +1,39 @@
+# --- Node ---
+node_modules
+npm-debug.log
+yarn.lock
+pnpm-lock.yaml
+
+# --- Build output ---
+dist
+build
+coverage
+
+# --- Environment files ---
+.env
+.env.*
+*.env
+
+# --- Git ---
+.git
+.gitignore
+
+# --- Docker files ---
+Dockerfile
+docker-compose.yml
+docker-compose.*.yml
+
+# --- IDE / OS ---
+.vscode
+.idea
+.DS_Store
+Thumbs.db
+
+# --- Tests ---
+test
+tests
+__tests__
+
+# --- Misc ---
+*.log
+*.md

@@ -6,12 +6,12 @@ export enum ConfigType{
   STORAGE='storage'
 }
 
-export const QueueName = 'lms_queue';
+export const QueueName = 'healthstride_queue';
 
-export const TopicExchange = 'lms.topic.exchange';
+export const TopicExchange = 'healthstride_queue.topic.exchange';
 
 export enum MailQueueEvents {
-    SEND_WELCOME = 'lms.mail.welcome',
-    FORGOT_PASSWORD = 'lms.mail.forgotpassword',
-    EMAIL_VERIFY = 'lms.mail.emailverify'
+    SEND_WELCOME = 'healthstride.mail.welcome',
+    FORGOT_PASSWORD = 'healthstride.mail.forgotpassword',
+    EMAIL_VERIFY = 'healthstride.mail.emailverify'
 }

@@ -37,6 +37,15 @@
         "tsConfigPath": "libs/common/tsconfig.lib.json"
       }
     },
+    "mail-worker": {
+      "type": "application",
+      "root": "apps/mail-worker",
+      "entryFile": "main",
+      "sourceRoot": "apps/mail-worker/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/mail-worker/tsconfig.app.json"
+      }
+    },
     "processing-service": {
       "type": "application",
       "root": "apps/processing-service",

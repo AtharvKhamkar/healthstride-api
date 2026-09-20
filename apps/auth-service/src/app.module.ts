@@ -4,10 +4,19 @@ import { ClinicModule } from './modules/clinic/clinic.module';
 import { AdminModule } from './modules/admin/admin.module';
 import { DoctorModule } from './modules/doctor/doctor.module';
 import { UserModule } from './modules/user/user.module';
+import { ConfigModule } from '@nestjs/config';
+import { CommonModule, rabbitmqConfig } from '@app/common';
 
 
 @Module({
-  imports: [ClinicModule, AdminModule, DoctorModule, UserModule],
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: '.env',
+      load: [rabbitmqConfig]
+    }),
+    CommonModule,
+    ClinicModule, AdminModule, DoctorModule, UserModule],
   controllers: [HealthController],
   providers: [],
 })

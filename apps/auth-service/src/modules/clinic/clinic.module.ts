@@ -1,10 +1,14 @@
 import { Module } from "@nestjs/common";
-import { ClinicService } from "./clinic.service";
+import { ClinicService } from "./services/clinic.service";
 import { ClinicController } from "./clinic.controller";
+import { CommonModule, rabbitmqConfig } from "@app/common";
+import { ClinicMailService } from "./services/clinic.mail.service";
 
 @Module({
-    imports:[],
-    controllers:[ClinicController],
-    providers:[ClinicService]
+    imports: [
+        CommonModule
+    ],
+    controllers: [ClinicController],
+    providers: [ClinicService, ClinicMailService],
 })
-export class ClinicModule{}
+export class ClinicModule { } 
